@@ -1,0 +1,43 @@
+#### Pirvanescu Sandra-Ioana 321CA ####
+
+## Despre implementarea temei
+Am implementat procesul de dirijare, protocolul ICMP, Longest Prefix Match
+si bonusul.
+Pentru inceput, am reluat laboratorul 4 si am inceput cu procesul de dirijare
+al pachetelor.
+Am folosit functia din schelet pentru a parsa tabela de rutare. Mi-am creat o
+functie de comparare pe care am folosit-o ca argument la functia din biblioteca C
+qsort. Aceasta functie, "compare_fct" verifica daca cele 2 intrari nu au acelasi
+prefix trecut prin masca. In acest caz, se va ordona strict dupa acest criteriu
+(prefixul celor 2 trecut prin masca). Daca cele 2 sunt egale, atunci se va ordona
+in functie de masca. Cea cu masca mai mare va fi "mai in dreapta" in vector fata
+de cea cu masca mai mica.
+In continuare, am implementat procesul de dirijare, cu tabela ordonata, dar
+cautare liniara. Am urmat pasii descrisi la protocolul IPv4 din enunt. 
+Am verificat ca checksum-ul sa fie corect si ca valoarea TTL-ului sa fie pozitiva
+si mai mare ca 1. In cazul in care pachetul este expirat, am trimis o eroare de
+tip ICMP cu code 0 si type 11.
+In continuare, am cautat cea mai buna ruta pentru a fi trimis pachetul. In cazul
+in care nu se gaseste, am trimis o eroare de tip ICMP cu code 0 si type 3.
+Am recalculat suma de control si am actualizat TTL, initial folosind functia 
+ip_checksum.
+Am actualizat campul de interfata al pachetului si am trimis pachetul spre
+urmatorul hop.
+Am verificat ca procesul de dirijare merge corespunzator cautand liniar si am
+implementat cautarea binara in tabela de rutare in aflarea celei mai bune rute.
+La cautarea binara, am cautat in tabela de rutare sortata intrarea care are valoarea
+prefixului trecut prin masca egal cu valoarea adresei ip destinatie trecuta prin masca.
+In cazul gasirii acestei egalitati, am cautat de asemenea intrarea ce respecta 
+aceasta conditie si are cea mai mare masca (adica este intrarea cea mai specifica).
+Daca nu a fost gasita nicio intrare, s-a returnat NULL.
+In continuare, am facut bonusul, citind articolul din referinta enuntului si formulele
+de calculare mai eficienta a checksum-ului, atribuind noua valoare calculata campului
+"check" din header-ul IPv4.
+Pentru protocolul ICMP, am folosit functiile "build_ethhdr", "send_icmp" si
+"send_icmp_error" din scheletul de anul trecut, functii pe care le-am inclus in
+fisierul "skel.c".
+
+## Dificultati
+Cea mai dificila parte a fost debug-ul.
+De asemenea, testarea implementarii si faptul ca dureaza foarte mult rularea 
+testelor a fost destul de deranjant, dar de inteles. 
